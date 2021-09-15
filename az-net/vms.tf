@@ -2,7 +2,7 @@
 resource "azurerm_network_interface" "ubuntu-vm-nic" {
     name                      = "ubuntu-vm-NIC"
     location                  = azurerm_resource_group.decode_rg.location
-    resource_group_name       = azurerm_resource_group.myterraformgroup.name
+    resource_group_name       = azurerm_resource_group.decode_rg.name
 
     ip_configuration {
         name                          = "myNicConfiguration"
@@ -22,47 +22,41 @@ resource "tls_private_key" "decode_ssh" {
   rsa_bits = 4096
 }
 output "tls_private_key" { 
-    value = tls_private_key.example_ssh.private_key_pem 
+    value = tls_private_key.decode_ssh.private_key_pem 
     sensitive = true
 }
 
 # Create virtual machine
-resource "azurerm_virtual_machine" "ubuntu-vm" {
-  name                  = "ubuntu-vm"
-  location              = azurerm_resource_group.decode_rg.location
-  resource_group_name   = azurerm_resource_group.decode_rg.name
-  network_interface_ids = [azurerm_network_interface.ubuntu-vm-nic.id]
-  vm_size               = "Standard_B1s"
+resource "azurerm_linux_virtual_machine" "ubuntu-vm" {
+    name                  = "ubuntu-vm"
+    location              = azurerm_resource_group.decode_rg.location
+    resource_group_name   = azurerm_resource_group.decode_rg.name
+    network_interface_ids = [azurerm_network_interface.ubuntu-vm-nic.id]
+    size                  = "Standard_B1s"
 
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
-  delete_os_disk_on_termination = true
+    os_disk {
+        name              = "myOsDisk"
+        caching           = "ReadWrite"
+        storage_account_type = "Premium_LRS"
+    }
 
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  delete_data_disks_on_termination = true
+    source_image_reference {
+        publisher = "Canonical"
+        offer     = "UbuntuServer"
+        sku       = "18.04-LTS"
+        version   = "latest"
+    }
 
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-  storage_os_disk {
-    name              = "myosdisk1"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  
-   computer_name  = "ubuntu-vm"
-   admin_username = "azureuser"
-   disable_password_authentication = truei
+    computer_name  = "ubuntu-vm"
+    admin_username = "azureuser"
+    disable_password_authentication = true
 
-   admin_ssh_key {
-      username   = "azureuser"
-      public_key = tls_private_key.decode_ssh.public_key_openssh
-   }
-   
-   tags = {
-    environment = "decode"
-  }
+    admin_ssh_key {
+        username       = "azureuser"
+        public_key     = tls_private_key.decode_ssh.public_key_openssh
+    }
+
+    tags = {
+        environment = "Terraform Demo"
+      }
 }
