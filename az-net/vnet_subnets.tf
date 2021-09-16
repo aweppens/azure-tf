@@ -19,3 +19,10 @@ resource "azurerm_subnet" "decode_subnet_priv" {
   virtual_network_name  = azurerm_virtual_network.decode_vNet.name
   address_prefixes      = ["10.0.2.0/24"]
 }
+
+resource "azurerm_subnet" "decode_subnet_bastion" {
+  name                  = "AzureBastionSubnet"
+  resource_group_name   = azurerm_resource_group.decode_rg.name
+  virtual_network_name  = azurerm_virtual_network.decode_vNet.name
+  address_prefixes      = ["10.0.3.0/27"]
+}

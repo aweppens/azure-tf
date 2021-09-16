@@ -18,12 +18,32 @@ resource "azurerm_network_interface" "ubuntu-vm-nic" {
 
 # Create (and display) an SSH key
 resource "tls_private_key" "decode_ssh" {
-  algorithm = "RSA"
-  rsa_bits = 4096
+  algorithm     = "RSA"
+  rsa_bits      = 4096
 }
 output "tls_private_key" { 
-    value = tls_private_key.decode_ssh.private_key_pem 
-    sensitive = true
+    value       = tls_private_key.decode_ssh.private_key_pem 
+    sensitive   = false
+}
+
+resource "azurerm_public_ip" "decode_bastion_pip"{
+    name                = "decode_bastion_pip"
+    location            = azurerm_resource_group.decode_rg.location
+    resource_group_name = azurerm_resource_group.decode_rg.name
+    allocation_method   = "Static"
+    sku                 = "Standard"
+}
+
+resource "azurerm_bastion_host" "decode_bastion_vm"{
+    name                = "decode_bastion_vm"
+    location            = azurerm_resource_group.decode_rg.location
+    resource_group_name = azurerm_resource_group.decode_rg.name
+
+    ip_configuration {
+        name            = "bastion_config"
+        subnet_id       = azurerm_subnet.decode_subnet_bastion.id
+        puplic_ip_address_id = azurerm_pupblic_ip.decode_bastion_pip.id
+    }
 }
 
 # Create virtual machine
