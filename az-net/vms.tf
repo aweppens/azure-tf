@@ -16,16 +16,6 @@ resource "azurerm_network_interface" "ubuntu-vm-nic" {
     }
 }
 
-# Create (and display) an SSH key
-resource "tls_private_key" "decode_ssh" {
-  algorithm     = "RSA"
-  rsa_bits      = 4096
-}
-output "tls_private_key" { 
-    value       = tls_private_key.decode_ssh.private_key_pem 
-    sensitive   = false
-}
-
 resource "azurerm_public_ip" "decode_bastion_pip"{
     name                = "decode_bastion_pip"
     location            = azurerm_resource_group.decode_rg.location
@@ -42,7 +32,7 @@ resource "azurerm_bastion_host" "decode_bastion_vm"{
     ip_configuration {
         name            = "bastion_config"
         subnet_id       = azurerm_subnet.decode_subnet_bastion.id
-        puplic_ip_address_id = azurerm_pupblic_ip.decode_bastion_pip.id
+        public_ip_address_id = azurerm_public_ip.decode_bastion_pip.id
     }
 }
 
@@ -73,7 +63,7 @@ resource "azurerm_linux_virtual_machine" "ubuntu-vm" {
 
     admin_ssh_key {
         username       = "azureuser"
-        public_key     = tls_private_key.decode_ssh.public_key_openssh
+        public_key     = file("~/.ssh/id_rsa.pub") 
     }
 
     tags = {
