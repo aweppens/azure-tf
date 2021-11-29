@@ -18,6 +18,18 @@ curl -sL https://packages.microsoft.com/keys/microsoft.asc |
         sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
 ```
 
+* Add the Azure CLI software repository:
+```
+AZ_REPO=$(lsb_release -cs)
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |
+    sudo tee /etc/apt/sources.list.d/azure-cli.list
+```
+
+* Update repository information and install the azure-cli package:
+```
+sudo apt-get update
+sudo apt-get install azure-cli
+```
 # Sign in
 You can follow the following link for detailed steps: https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash
 Login and Verify subscriptions.  Replace the <microsoft_account_email> placeholder with the Microsoft account email address whose Azure subscriptions you want to listjk
