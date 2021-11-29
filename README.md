@@ -33,8 +33,10 @@ az account set --subscription "<subscription_id_or_subscription_name>"
 # Create service principal for role-based access.
 Note the output of the Service Principal
 command where the client id, client secret, and tenant ids are shown.
+* You can replace the <service-principal-name> with a custom name
+* Upon successful completion, az ad sp create-for-rbac displays several values. The appId, password, and tenant values are used in the next step
 ```
-az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/${SUBSCRIPTION_ID}"
+az ad sp create-for-rbac --name <service_principal_name> --role Contributor
 ```
 # Environment variables
 For the below values, you should have noted them
