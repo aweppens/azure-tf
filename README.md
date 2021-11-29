@@ -41,14 +41,10 @@ az ad sp create-for-rbac --name <service_principal_name> --role Contributor
 # Environment variables
 For the below values, you should have noted them
 from the above steps.
+* Edit ~/.bashrc
 ```
-echo "Setting environment variables for Terraform"
-export ARM_SUBSCRIPTION_ID="${SUBSCRIPTION_ID}"
-export ARM_CLIENT_ID="<azure_client_id>"
+export ARM_SUBSCRIPTION_ID="<SUBSCRIPTION_ID>"
+export ARM_CLIENT_ID="<azure_appId>"
 export ARM_CLIENT_SECRET="<azure_client_secret>"
 export ARM_TENANT_ID="<azure_tenant_id>"
-```
-# Not needed for public, required for usgovernment, german, china.
-```
-export ARM_ENVIRONMENT=public
 ```
