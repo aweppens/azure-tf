@@ -5,15 +5,30 @@
   * On MacOS, run brew update && brew install azure-cli
     * On Windows, you can download an rund the installer
 
+* Install on Ubuntu
+```
+sudo apt-get update
+sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
+```
+
+* Download and install the Microsoft signing key:
+```
+curl -sL https://packages.microsoft.com/keys/microsoft.asc |
+    gpg --dearmor |
+        sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+```
+
 # Sign in
+You can follow the following link for detailed steps: https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash
+Login and Verify subscriptions.  Replace the <microsoft_account_email> placeholder with the Microsoft account email address whose Azure subscriptions you want to listjk
 ```
 az login
-az account list --all --query "[].id"
+az account list --query "[?user.name=='<microsoft_account_email>'].{Name:name, ID:id, Default:isDefault}" --output Table
 ```
 # Set Azure subscription
 ```
 export SUBSCRIPTION_ID="<azure_subscription_id>"
-az account set --subscription="${SUBSCRIPTION_ID}"
+az account set --subscription "<subscription_id_or_subscription_name>"
 ```
 # Create service principal for role-based access.
 Note the output of the Service Principal
