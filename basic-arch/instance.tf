@@ -39,11 +39,11 @@ resource "azurerm_virtual_machine" "demo-instance" {
 resource "azurerm_network_interface" "demo-instance" {
   name                      = "${var.prefix}-instance1"
   location                  = var.location
-  resource_group_name       = azurerm_resource_group.demo.name
+  resource_group_name       = azurerm_resource_group.basic.name
 
   ip_configuration {
     name                          = "instance1"
-    subnet_id                     = azurerm_subnet.basic-internal-sebnet-1.id
+    subnet_id                     = azurerm_subnet.basic-internal-subnet-1.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.demo-instance.id
   }
@@ -57,7 +57,7 @@ resource "azurerm_network_interface_security_group_association" "allow-ssh" {
 resource "azurerm_public_ip" "demo-instance" {
     name                         = "instance1-public-ip"
     location                     = var.location
-    resource_group_name          = azurerm_resource_group.demo.name
+    resource_group_name          = azurerm_resource_group.basic.name
     allocation_method            = "Dynamic"
 }
 
