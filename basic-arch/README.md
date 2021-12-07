@@ -32,4 +32,8 @@ This will genenrate mykey and mykey.pub. Terraform will send mykey.pub to the Az
 
 If you can't login make sure you added the correct IP
 
-
+## Finding Images
+```
+az vm image list -p "Canonical"
+az vm image list -p "Microsoft"
+```
