@@ -10,6 +10,10 @@ This is just a very basic Azure Landing Zone Setup containing the following:
     * NSG to allow SSH
     * Public IP
 
+# Diagram
+![AzureSinglevNet](https://user-images.githubusercontent.com/90761642/145072126-975317ab-6a19-4c53-a0df-edac464a3dee.png)
+
+
 # Usage
 
 * add your own IP to the ssh-source-address variable in terraform.tfvars
